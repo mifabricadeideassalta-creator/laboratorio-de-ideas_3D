@@ -1,0 +1,59 @@
+[
+  {
+    "id": "SUBEXTRUSION_TAC_TAC",
+    "titulo": "Subextrusión por Atasco o Resistencia (Ruido Tac-Tac)",
+    "etapa": "EXTRUSION",
+    "busquedas_coloquiales": ["ruido tac tac", "chasquido extrusor", "no sale plastico", "falta material", "salta el motor"],
+    "sintomas": "El motor paso a paso del extrusor salta perdiendo pasos y produciendo un 'clack' o 'tac-tac' constante mientras faltan líneas en la impresión.",
+    "preguntas_descarte": [
+      "¿El ruido ocurre solo en la primera capa?",
+      "¿Si retraes el filamento manualmente sale deformado o más grueso en la punta?"
+    ],
+    "solucion_rapida_slicer": [
+      "Aumentar temperatura de impresión 5°C - 10°C.",
+      "Reducir velocidad de extrusión o flujo (Flow Ratio) un 5%."
+    ],
+    "solucion_mecanica": [
+      "Verificar obstrucción parcial en la boquilla (Hotend Heat Creep).",
+      "Si ocurre solo en 1ra capa, ajustar Z-Offset ya que la boquilla está demasiado pegada a la cama."
+    ]
+  },
+  {
+    "id": "STRINGING_HILOS",
+    "titulo": "Encordado / Hilos de Filamento (Stringing)",
+    "etapa": "SLICER",
+    "busquedas_coloquiales": ["pelitos", "hilitos", "telas de araña", "pelo de gato", "rebarba"],
+    "sintomas": "Aparecen finas ramas o hilos de plástico en los desplazamientos en vacío entre una pared y otra.",
+    "preguntas_descarte": [
+      "¿El filamento lleva más de 2 semanas expuesto a la humedad del ambiente?",
+      "¿El problema empeora al aumentar la temperatura?"
+    ],
+    "solucion_rapida_slicer": [
+      "Incrementar la distancia de retracción en 0.5mm (Direct Drive) o 1.5mm (Bowden).",
+      "Activar opción Z-Hop o Wiping en el desplazamiento."
+    ],
+    "solucion_mecanica": [
+      "Secar el filamento en horno/secadora (PETG y TPU son altamente sensibles a humedad).",
+      "Revisar desgaste o holgura en el tubo PTFE/Capricorn."
+    ]
+  },
+  {
+    "id": "DESPEGADO_CAMA_WARPING",
+    "titulo": "Falta de Adherencia o Deformación en Esquinas (Warping)",
+    "etapa": "PRIMERA_CAPA",
+    "busquedas_coloquiales": ["se levanta las puntas", "no pega la primera capa", "se me suelta la pieza", "se dobla abajo"],
+    "sintomas": "Las esquinas inferiores de la pieza se curvan hacia arriba durante la impresión o se desprende por completo de la superficie.",
+    "preguntas_descarte": [
+      "¿Limpiaste la cama de impresión con alcohol isopropílico o agua con detergente antes de imprimir?",
+      "¿Hay corrientes de aire frío cerca de la impresora?"
+    ],
+    "solucion_rapida_slicer": [
+      "Agregar Borde (Brim) de 5mm a 10mm alrededor de la pieza.",
+      "Desactivar el ventilador de capa durante las primeras 3 a 5 capas."
+    ],
+    "solucion_mecanica": [
+      "Lavar la lámina PEI/Vidrio con agua caliente y detergente neutro para eliminar grasa corporal.",
+      "Ajustar el Z-Offset bajando la boquilla 0.02mm a 0.05mm."
+    ]
+  }
+]
