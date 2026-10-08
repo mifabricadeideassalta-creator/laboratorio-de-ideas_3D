@@ -1,12 +1,39 @@
 let databaseTrouble = [];
 let currentStage = "ALL";
 
+// Base de datos de promociones / Sponsors
+const SPONSORS_DB = [
+  {
+    badge: "VENTA DE EQUIPOS 3D",
+    text: "🛈 ¿Buscás tu próxima impresora 3D? Equipos FDM y Resina con garantía y soporte local en Salta.",
+    link: "https://wa.me/5493870000000?text=Hola!%20Quiero%20consultar%20por%20impresoras%203D%20disponibles"
+  },
+  {
+    badge: "OFERTA INSUMOS",
+    text: "🧵 Filamentos PLA, ABS y resinas seleccionadas. Stock inmediato con entrega local.",
+    link: "https://wa.me/5493870000000?text=Hola!%20Busco%20presupuesto%20de%20filamentos%20e%20insumos"
+  },
+  {
+    badge: "SERVICIO TÉCNICO",
+    text: "🔧 ¿Tu impresora necesita mantenimiento o calibración? Diagnosticamos e instalamos repuestos.",
+    link: "https://wa.me/5493870000000?text=Hola!%20Necesito%20servicio%20técnico%20para%20mi%20impresora%203D"
+  },
+  {
+    badge: "DESARROLLO A PEDIDO",
+    text: "🚀 Mi Fábrica de Ideas: Impresión 3D industrial, prototipado y piezas a medida.",
+    link: "https://wa.me/5493870000000?text=Hola!%20Quiero%20presupuestar%20un%20trabajo%20de%20impresión%203D"
+  }
+];
+
+let currentSponsorIndex = 0;
+
 document.addEventListener("DOMContentLoaded", async () => {
   const userCountEl = document.getElementById("user-count");
   if (userCountEl) userCountEl.textContent = "Comunidad Maker";
 
   await loadDatabase();
   setupEventListeners();
+  initSponsorRotator();
 });
 
 async function loadDatabase() {
@@ -118,4 +145,32 @@ function filterData() {
   });
 
   renderCards(filtered);
+}
+
+function initSponsorRotator() {
+  const badgeEl = document.getElementById("sponsor-badge");
+  const textEl = document.getElementById("sponsor-text");
+  const linkEl = document.getElementById("sponsor-link");
+
+  if (!badgeEl || !textEl || !linkEl) return;
+
+  function updateBanner(index) {
+    const item = SPONSORS_DB[index];
+    textEl.style.opacity = "0";
+    
+    setTimeout(() => {
+      badgeEl.textContent = item.badge;
+      textEl.textContent = item.text;
+      linkEl.href = item.link;
+      textEl.style.opacity = "1";
+    }, 200);
+  }
+
+  currentSponsorIndex = Math.floor(Math.random() * SPONSORS_DB.length);
+  updateBanner(currentSponsorIndex);
+
+  setInterval(() => {
+    currentSponsorIndex = (currentSponsorIndex + 1) % SPONSORS_DB.length;
+    updateBanner(currentSponsorIndex);
+  }, 7000);
 }
