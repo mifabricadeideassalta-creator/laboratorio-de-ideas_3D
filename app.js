@@ -27,14 +27,49 @@ const SPONSORS_DB = [
 
 let currentSponsorIndex = 0;
 
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
+  // Inicialización del banner de inmediato
+  initSponsorRotator();
+
   const userCountEl = document.getElementById("user-count");
   if (userCountEl) userCountEl.textContent = "Comunidad Maker";
 
-  await loadDatabase();
+  loadDatabase();
   setupEventListeners();
-  initSponsorRotator();
 });
+
+function initSponsorRotator() {
+  const badgeEl = document.getElementById("sponsor-badge");
+  const textEl = document.getElementById("sponsor-text");
+  const linkEl = document.getElementById("sponsor-link");
+
+  // Si no encuentra por ID, busca por selectores de etiqueta dentro del contenedor
+  const targetBadge = badgeEl || document.querySelector("a[href='#'] span, a span");
+  const targetText = textEl || document.querySelector("a[href='#'] p, a p");
+  const targetLink = linkEl || document.querySelector("a[href='#']") || document.querySelector("a");
+
+  if (!targetText) return;
+
+  function updateBanner(index) {
+    const item = SPONSORS_DB[index];
+    targetText.style.opacity = "0";
+    
+    setTimeout(() => {
+      if (targetBadge) targetBadge.textContent = item.badge;
+      targetText.textContent = item.text;
+      if (targetLink) targetLink.href = item.link;
+      targetText.style.opacity = "1";
+    }, 200);
+  }
+
+  currentSponsorIndex = Math.floor(Math.random() * SPONSORS_DB.length);
+  updateBanner(currentSponsorIndex);
+
+  setInterval(() => {
+    currentSponsorIndex = (currentSponsorIndex + 1) % SPONSORS_DB.length;
+    updateBanner(currentSponsorIndex);
+  }, 7000);
+}
 
 async function loadDatabase() {
   try {
@@ -145,32 +180,4 @@ function filterData() {
   });
 
   renderCards(filtered);
-}
-
-function initSponsorRotator() {
-  const badgeEl = document.getElementById("sponsor-badge");
-  const textEl = document.getElementById("sponsor-text");
-  const linkEl = document.getElementById("sponsor-link");
-
-  if (!badgeEl || !textEl || !linkEl) return;
-
-  function updateBanner(index) {
-    const item = SPONSORS_DB[index];
-    textEl.style.opacity = "0";
-    
-    setTimeout(() => {
-      badgeEl.textContent = item.badge;
-      textEl.textContent = item.text;
-      linkEl.href = item.link;
-      textEl.style.opacity = "1";
-    }, 200);
-  }
-
-  currentSponsorIndex = Math.floor(Math.random() * SPONSORS_DB.length);
-  updateBanner(currentSponsorIndex);
-
-  setInterval(() => {
-    currentSponsorIndex = (currentSponsorIndex + 1) % SPONSORS_DB.length;
-    updateBanner(currentSponsorIndex);
-  }, 7000);
 }
