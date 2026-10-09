@@ -13,23 +13,23 @@
       theme: {
         extend: {
           colors: {
-            brand: { 500: '#a855f7', 600: '#9333ea' }, // Violeta Neón
-            lab: { 400: '#22d3ee', 500: '#06b6d4' }    // Cian Eléctrico
+            brand: { 500: '#a855f7', 600: '#9333ea' }, // Violeta Neón principal
+            lab: { 400: '#22d3ee', 500: '#06b6d4' }    // Cian / Turquesa Eléctrico
           }
         }
       }
     }
   </script>
 </head>
-<body class="bg-black text-slate-100 flex flex-col min-h-screen font-sans pb-20 md:pb-0 relative overflow-x-hidden" style="background-color: #050508; background-image: radial-gradient(circle at 15% 15%, rgba(168, 85, 247, 0.25) 0%, transparent 45%), radial-gradient(circle at 85% 75%, rgba(34, 211, 238, 0.2) 0%, transparent 45%), linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px); background-size: 100% 100%, 100% 100%, 35px 35px, 35px 35px;">
+<body class="bg-black text-slate-100 flex flex-col min-h-screen font-sans pb-20 md:pb-0 relative overflow-x-hidden bg-cover bg-center bg-fixed bg-no-repeat" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.85), rgba(10,10,10,0.92)), url('fondo-taller.jpg');">
 
-  <!-- Overlay de textura grid Cyberpunk -->
+  <!-- Overlay sutil de textura grid Cyberpunk -->
   <div class="fixed inset-0 pointer-events-none z-0" style="background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px); background-size: 40px 40px;"></div>
 
-  <!-- Contenedor Principal con z-10 sobre el overlay -->
+  <!-- Contenedor Principal en orden natural vertical -->
   <div class="relative z-10 flex flex-col min-h-screen w-full">
 
-    <!-- Header -->
+    <!-- 1. Header (Arriba) -->
     <header class="bg-zinc-950/85 backdrop-blur-md border-b border-purple-500/30 sticky top-0 z-50 shadow-[0_0_15px_rgba(168,85,247,0.15)]">
       <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center space-x-3">
@@ -51,22 +51,22 @@
       </div>
     </header>
 
-    <!-- Banner Publicitario Header -->
+    <!-- 2. Banner Publicitario Header -->
     <div class="max-w-6xl mx-auto w-full px-4 mt-4">
       <div class="border border-cyan-500/40 bg-zinc-900/85 backdrop-blur-sm hover:bg-zinc-900 transition rounded-xl p-3.5 text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] relative overflow-hidden group">
         <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl pointer-events-none"></div>
         <a id="sponsor-link" href="#" target="_blank" rel="noopener noreferrer" class="block">
           <span id="sponsor-badge" class="inline-block text-[10px] font-mono font-bold uppercase tracking-wider bg-cyan-500/20 text-lab-400 px-2 py-0.5 rounded-full border border-cyan-500/40 mb-1.5 shadow-[0_0_8px_rgba(34,211,238,0.3)]">
-            SPONSOR OFICIAL
+            VENTA DE EQUIPOS 3D
           </span>
           <p id="sponsor-text" class="text-xs md:text-sm font-semibold text-slate-200 group-hover:text-lab-400 transition-colors">
-            Cargando promociones...
+            ℹ️ ¿Buscás tu próxima impresora 3D? Equipos FDM y Resina con garantía y soporte local en Salta.
           </p>
         </a>
       </div>
     </div>
 
-    <!-- Main Container -->
+    <!-- 3. Contenido Principal (Sidebar + Seccion de Diagnostico) -->
     <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow grid grid-cols-1 md:grid-cols-4 gap-6">
       
       <!-- Sidebar / Selector de Máquina -->
@@ -97,9 +97,10 @@
         </div>
       </aside>
 
-      <!-- Main Troubleshooting Area -->
+      <!-- Seccion Principal de Diagnostico -->
       <section class="md:col-span-3 space-y-4">
-        <!-- Search Input con Lupa -->
+        
+        <!-- Buscador con Lupa -->
         <div class="relative flex items-center w-full">
           <input 
             type="text" 
@@ -127,7 +128,7 @@
           <button class="stage-btn bg-zinc-900/85 backdrop-blur-sm text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-zinc-800 hover:border-purple-500/40" data-stage="SLICER">5. Slicer / Parámetros</button>
         </div>
 
-        <!-- Result List Container -->
+        <!-- Lista de Tarjetas (Abajo del buscador) -->
         <div id="troubleshoot-cards" class="space-y-4">
           <!-- Render dinámico desde troubleshooting.json -->
         </div>
@@ -135,7 +136,7 @@
 
     </main>
 
-    <!-- Mobile Bottom Nav -->
+    <!-- 4. Navegacion Mobile Footer -->
     <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-zinc-950/90 backdrop-blur-md border-t border-purple-500/30 flex justify-around py-2 z-50">
       <a href="#" class="flex flex-col items-center text-xs text-brand-500">
         <span>🔬</span>
