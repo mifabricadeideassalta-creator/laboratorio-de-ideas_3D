@@ -210,5 +210,100 @@ function filterData() {
                    itemSintomas.includes("eje") ||
                    itemSintomas.includes("correa") ||
                    itemSintomas.includes("motor");
-    } else if (stage.includes("5") || stage.includes("slicer") || stage.includes
-              
+    } else if (stage.includes("5") || stage.includes("slicer") || stage.includes("parametro")) {
+      matchStage = itemEtapa.includes("5") || itemEtapa.includes("slicer") || itemEtapa.includes("parametro");
+    } else {
+      matchStage = itemEtapa.includes(stage) || stage.includes(itemEtapa);
+    }
+
+    const matchText = !query || 
+      itemTitulo.includes(query) ||
+      itemSintomas.includes(query) ||
+      (item.busquedas_coloquiales || []).some(b => clean(b).includes(query));
+
+    return matchStage && matchText;
+  });
+
+  renderCards(filtered);
+}
+
+// --- FUNCIONES DEL MODAL DE REGISTRO ---
+
+function toggleModal(show) {
+  const modal = document.getElementById("modal-registro");
+  if (modal) {
+    if (show) {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    } else {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+  }
+}
+
+async function enviarAGoogleSheet(e) {
+  e.preventDefault();
+  
+  const btnSubmit = document.getElementById("btn-submit");
+  const textoOriginal = btnSubmit ? btnSubmit.innerHTML : "Guardar Registro";
+  if (btnSubmit) {
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = "⏳ Guardando...";
+  }
+
+  const payload = {
+    nombre: document.getElementById("reg-nombre").value.trim(),
+    contacto: document.getElementById("reg-contacto").value.trim(),
+    equipo: document.getElementById("reg-equipo").value.trim()
+  };
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    alert("¡Registro guardado con éxito!");
+    document.getElementById("form-registro").reset();
+    toggleModal(false);
+  } catch (error) {
+    console.error("Error al enviar los datos a Google Sheets:", error);
+    alert("Hubo un problema de conexión al guardar los datos.");
+  } finally {
+    if (btnSubmit) {
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = textoOriginal;
+    }
+  }
+}
+
+// --- FUNCIONALIDAD DE CALCULADORA DE COSTOS EXPRESS ---
+
+function calcularCostoImpresion() {
+  const elemGramos = document.getElementById('calc-gramos');
+  const elemPrecioKg = document.getElementById('calc-precio-kg');
+  const elemHoras = document.getElementById('calc-horas');
+  const elemCostoHora = document.getElementById('calc-costo-hora');
+  const elemPackaging = document.getElementById('calc-packaging');
+  const elemMargen = document.getElementById('calc-margen');
+  const elemTotal = document.getElementById('calc-total-precio');
+
+  if (!elemTotal) return;
+
+  const gramos = parseFloat(elemGramos?.value) || 0;
+  const precioKg = parseFloat(elemPrecioKg?.value) || 0;
+  const horas = parseFloat(elemHoras?.value) || 0;
+  const costoHora = parseFloat(elemCostoHora?.value) || 0;
+  const packaging = parseFloat(elemPackaging?.value) || 0;
+  const multiplicadorMargen = parseFloat(elemMargen?.value) || 1;
+
+  const costoMaterial = (gramos / 1000) * precioKg;
+  const costoMaquina = horas * costoHora;
+  const costoBase = costoMaterial + costoMaquina + packaging;
+  const precioFinal = costoBase * multiplicadorMargen;
+
+  elemTotal.innerText = `$ ${Math.round(precioFinal).toLocaleString('es-AR')}`;
+}
