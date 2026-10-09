@@ -1,4 +1,4 @@
-
+// URL de la aplicación web de Google Apps Script
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcV-90MJF41JDmIy7OKUyO8kQbwg8dk-5P7HhOuA1xUqkBrrgmNlqJOWVu4cesCzkKAw/exec";
 
 let databaseTrouble = [];
@@ -32,10 +32,6 @@ let currentSponsorIndex = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
   initSponsorRotator();
-
-  const userCountEl = document.getElementById("user-count");
-  if (userCountEl) userCountEl.textContent = "Comunidad Maker";
-
   loadDatabase();
   setupEventListeners();
 });
@@ -148,8 +144,17 @@ function renderCards(data) {
 
 function setupEventListeners() {
   const searchInput = document.getElementById("input-search");
+  const searchBtn = document.getElementById("btn-search");
+
   if (searchInput) {
     searchInput.addEventListener("input", () => filterData());
+    searchInput.addEventListener("keyup", (e) => {
+      if (e.key === "Enter") filterData();
+    });
+  }
+
+  if (searchBtn) {
+    searchBtn.addEventListener("click", () => filterData());
   }
 
   const stageButtons = document.querySelectorAll(".stage-btn");
@@ -167,6 +172,7 @@ function setupEventListeners() {
     });
   });
 }
+
 function filterData() {
   const searchInput = document.getElementById("input-search");
   const rawQuery = searchInput ? searchInput.value.toLowerCase().trim() : "";
@@ -181,6 +187,8 @@ function filterData() {
 
   const filtered = databaseTrouble.filter((item) => {
     const itemEtapa = clean(item.etapa);
+    const itemTitulo = clean(item.titulo);
+    const itemSintomas = clean(item.sintomas);
 
     let matchStage = false;
 
@@ -193,7 +201,14 @@ function filterData() {
     } else if (stage.includes("3") || stage.includes("termica") || stage.includes("humedad")) {
       matchStage = itemEtapa.includes("3") || itemEtapa.includes("termica") || itemEtapa.includes("humedad");
     } else if (stage.includes("4") || stage.includes("mecanica") || stage.includes("mecanic")) {
-      matchStage = itemEtapa.includes("4") || itemEtapa.includes("mecanica") || itemEtapa.includes("mecanic");
+      matchStage = itemEtapa.includes("4") || 
+                   itemEtapa.includes("mecanica") || 
+                   itemEtapa.includes("mecanic") || 
+                   itemTitulo.includes("mecanic") || 
+                   itemSintomas.includes("mecanic") ||
+                   itemSintomas.includes("eje") ||
+                   itemSintomas.includes("correa") ||
+                   itemSintomas.includes("motor");
     } else if (stage.includes("5") || stage.includes("slicer") || stage.includes("parametro")) {
       matchStage = itemEtapa.includes("5") || itemEtapa.includes("slicer") || itemEtapa.includes("parametro");
     } else {
@@ -201,8 +216,8 @@ function filterData() {
     }
 
     const matchText = !query || 
-      clean(item.titulo).includes(query) ||
-      clean(item.sintomas).includes(query) ||
+      itemTitulo.includes(query) ||
+      itemSintomas.includes(query) ||
       (item.busquedas_coloquiales || []).some(b => clean(b).includes(query));
 
     return matchStage && matchText;
@@ -211,3 +226,55 @@ function filterData() {
   renderCards(filtered);
 }
 
+// --- FUNCIONES DEL MODAL DE REGISTRO ---
+
+function toggleModal(show) {
+  const modal = document.getElementById("modal-registro");
+  if (modal) {
+    if (show) {
+      modal.classList.remove("hidden");
+      modal.classList.add("flex");
+    } else {
+      modal.classList.add("hidden");
+      modal.classList.remove("flex");
+    }
+  }
+}
+
+async function enviarAGoogleSheet(e) {
+  e.preventDefault();
+  
+  const btnSubmit = document.getElementById("btn-submit");
+  const textoOriginal = btnSubmit ? btnSubmit.innerHTML : "Guardar Registro";
+  if (btnSubmit) {
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = "⏳ Guardando...";
+  }
+
+  const payload = {
+    nombre: document.getElementById("reg-nombre").value.trim(),
+    contacto: document.getElementById("reg-contacto").value.trim(),
+    equipo: document.getElementById("reg-equipo").value.trim()
+  };
+
+  try {
+    await fetch(GOOGLE_SCRIPT_URL, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+
+    alert("¡Registro guardado con éxito!");
+    document.getElementById("form-registro").reset();
+    toggleModal(false);
+  } catch (error) {
+    console.error("Error al enviar los datos a Google Sheets:", error);
+    alert("Hubo un problema de conexión al guardar los datos.");
+  } finally {
+    if (btnSubmit) {
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = textoOriginal;
+    }
+  }
+}
