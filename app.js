@@ -161,7 +161,7 @@ function setupEventListeners() {
       btn.classList.add("active", "bg-brand-500", "text-white");
       btn.classList.remove("bg-slate-800", "text-slate-400");
 
-      currentStage = btn.dataset.stage;
+      currentStage = btn.dataset.stage || btn.textContent.trim();
       filterData();
     });
   });
