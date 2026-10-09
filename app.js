@@ -28,7 +28,6 @@ const SPONSORS_DB = [
 let currentSponsorIndex = 0;
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Inicialización del banner de inmediato
   initSponsorRotator();
 
   const userCountEl = document.getElementById("user-count");
@@ -43,7 +42,6 @@ function initSponsorRotator() {
   const textEl = document.getElementById("sponsor-text");
   const linkEl = document.getElementById("sponsor-link");
 
-  // Si no encuentra por ID, busca por selectores de etiqueta dentro del contenedor
   const targetBadge = badgeEl || document.querySelector("a[href='#'] span, a span");
   const targetText = textEl || document.querySelector("a[href='#'] p, a p");
   const targetLink = linkEl || document.querySelector("a[href='#']") || document.querySelector("a");
@@ -171,7 +169,6 @@ function filterData() {
   const searchInput = document.getElementById("input-search");
   const rawQuery = searchInput ? searchInput.value.toLowerCase().trim() : "";
   
-  // Limpia tildes y acentos de cualquier texto
   const clean = (text) => (text || "")
     .toLowerCase()
     .normalize("NFD")
@@ -183,7 +180,6 @@ function filterData() {
   const filtered = databaseTrouble.filter((item) => {
     const itemEtapa = clean(item.etapa);
 
-    // Coincidencia flexible por número o palabra clave
     let matchStage = false;
 
     if (stage === "all" || stage.includes("todas")) {
@@ -202,43 +198,10 @@ function filterData() {
       matchStage = itemEtapa.includes(stage) || stage.includes(itemEtapa);
     }
 
-    // Buscador
     const matchText = !query || 
       clean(item.titulo).includes(query) ||
       clean(item.sintomas).includes(query) ||
       (item.busquedas_coloquiales || []).some(b => clean(b).includes(query));
-
-    return matchStage && matchText;
-  });
-
-  renderCards(filtered);
-}
-
-    // 2. Comprobar si coincide la etapa
-    let matchStage = false;
-
-    if (selectedStage === "all" || selectedStage === "todas las etapas") {
-      matchStage = true;
-    } else if (selectedStage.includes("capa") || selectedStage.startsWith("1")) {
-      matchStage = itemEtapa.includes("capa") || itemEtapa.startsWith("1");
-    } else if (selectedStage.includes("extru") || selectedStage.startsWith("2")) {
-      matchStage = itemEtapa.includes("extru") || itemEtapa.startsWith("2");
-    } else if (selectedStage.includes("tér") || selectedStage.includes("humed") || selectedStage.startsWith("3")) {
-      matchStage = itemEtapa.includes("tér") || itemEtapa.includes("humed") || itemEtapa.startsWith("3");
-    } else if (selectedStage.includes("mecán") || selectedStage.startsWith("4")) {
-      matchStage = itemEtapa.includes("mecán") || itemEtapa.startsWith("4");
-    } else if (selectedStage.includes("slicer") || selectedStage.startsWith("5")) {
-      matchStage = itemEtapa.includes("slicer") || itemEtapa.startsWith("5");
-    } else {
-      // Comparación directa de respaldo
-      matchStage = itemEtapa.includes(selectedStage) || selectedStage.includes(itemEtapa);
-    }
-
-    // 3. Comprobar si coincide el texto buscado
-    const matchText = !query || 
-                      (item.titulo || "").toLowerCase().includes(query) ||
-                      (item.sintomas || "").toLowerCase().includes(query) ||
-                      (item.busquedas_coloquiales || []).some(b => b.toLowerCase().includes(query));
 
     return matchStage && matchText;
   });
