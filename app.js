@@ -34,6 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initSponsorRotator();
   loadDatabase();
   setupEventListeners();
+  calcularCostoImpresion(); // Inicializa el costo de la calculadora al cargar
 });
 
 function initSponsorRotator() {
@@ -107,30 +108,30 @@ function renderCards(data) {
       .join("");
 
     const card = document.createElement("div");
-    card.className = "bg-slate-800 border border-slate-700/80 rounded-xl p-4 transition hover:border-slate-600";
+    card.className = "bg-zinc-900/85 backdrop-blur-sm border border-purple-500/20 hover:border-purple-500/40 rounded-xl p-4 transition shadow-[0_0_10px_rgba(0,0,0,0.3)] space-y-3";
     card.innerHTML = `
-      <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center justify-between">
         <span class="text-[10px] font-mono uppercase bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30">
           ${item.etapa || 'GENERAL'}
         </span>
         <span class="text-xs text-slate-500">ID: ${item.id || 'N/A'}</span>
       </div>
-      <h3 class="font-bold text-slate-100 text-base mb-1">${item.titulo || 'Sin título'}</h3>
-      <p class="text-xs text-slate-300 mb-3">${item.sintomas || ''}</p>
+      <h3 class="font-bold text-slate-100 text-base">${item.titulo || 'Sin título'}</h3>
+      <p class="text-xs text-slate-300">${item.sintomas || ''}</p>
       
-      <div class="bg-slate-900/60 p-3 rounded-lg border border-slate-700/50 space-y-2 text-xs mb-3">
+      <div class="bg-black/50 p-3 rounded-lg border border-slate-700/50 space-y-1 text-xs">
         <p class="text-slate-400 font-semibold">❓ Pregunta de descarte:</p>
         <p class="text-slate-300 italic">"${pregunta}"</p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
-        <div class="bg-slate-900/40 p-2 rounded border border-slate-700/40">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs pt-1">
+        <div class="bg-black/40 p-2.5 rounded border border-cyan-500/20">
           <span class="text-lab-400 font-semibold block mb-1">🎛️ Solución Slicer:</span>
           <ul class="list-disc list-inside text-slate-300 space-y-1">
             ${slicerList}
           </ul>
         </div>
-        <div class="bg-slate-900/40 p-2 rounded border border-slate-700/40">
+        <div class="bg-black/40 p-2.5 rounded border border-purple-500/20">
           <span class="text-brand-400 font-semibold block mb-1">🔧 Solución Mecánica:</span>
           <ul class="list-disc list-inside text-slate-300 space-y-1">
             ${mecanicaList}
@@ -162,10 +163,10 @@ function setupEventListeners() {
     btn.addEventListener("click", () => {
       stageButtons.forEach((b) => {
         b.classList.remove("active", "bg-brand-500", "text-white");
-        b.classList.add("bg-slate-800", "text-slate-400");
+        b.classList.add("bg-zinc-900/85", "text-slate-400");
       });
       btn.classList.add("active", "bg-brand-500", "text-white");
-      btn.classList.remove("bg-slate-800", "text-slate-400");
+      btn.classList.remove("bg-zinc-900/85", "text-slate-400");
 
       currentStage = btn.dataset.stage || btn.textContent.trim();
       filterData();
@@ -209,72 +210,5 @@ function filterData() {
                    itemSintomas.includes("eje") ||
                    itemSintomas.includes("correa") ||
                    itemSintomas.includes("motor");
-    } else if (stage.includes("5") || stage.includes("slicer") || stage.includes("parametro")) {
-      matchStage = itemEtapa.includes("5") || itemEtapa.includes("slicer") || itemEtapa.includes("parametro");
-    } else {
-      matchStage = itemEtapa.includes(stage) || stage.includes(itemEtapa);
-    }
-
-    const matchText = !query || 
-      itemTitulo.includes(query) ||
-      itemSintomas.includes(query) ||
-      (item.busquedas_coloquiales || []).some(b => clean(b).includes(query));
-
-    return matchStage && matchText;
-  });
-
-  renderCards(filtered);
-}
-
-// --- FUNCIONES DEL MODAL DE REGISTRO ---
-
-function toggleModal(show) {
-  const modal = document.getElementById("modal-registro");
-  if (modal) {
-    if (show) {
-      modal.classList.remove("hidden");
-      modal.classList.add("flex");
-    } else {
-      modal.classList.add("hidden");
-      modal.classList.remove("flex");
-    }
-  }
-}
-
-async function enviarAGoogleSheet(e) {
-  e.preventDefault();
-  
-  const btnSubmit = document.getElementById("btn-submit");
-  const textoOriginal = btnSubmit ? btnSubmit.innerHTML : "Guardar Registro";
-  if (btnSubmit) {
-    btnSubmit.disabled = true;
-    btnSubmit.innerHTML = "⏳ Guardando...";
-  }
-
-  const payload = {
-    nombre: document.getElementById("reg-nombre").value.trim(),
-    contacto: document.getElementById("reg-contacto").value.trim(),
-    equipo: document.getElementById("reg-equipo").value.trim()
-  };
-
-  try {
-    await fetch(GOOGLE_SCRIPT_URL, {
-      method: "POST",
-      mode: "no-cors",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    alert("¡Registro guardado con éxito!");
-    document.getElementById("form-registro").reset();
-    toggleModal(false);
-  } catch (error) {
-    console.error("Error al enviar los datos a Google Sheets:", error);
-    alert("Hubo un problema de conexión al guardar los datos.");
-  } finally {
-    if (btnSubmit) {
-      btnSubmit.disabled = false;
-      btnSubmit.innerHTML = textoOriginal;
-    }
-  }
-}
+    } else if (stage.includes("5") || stage.includes("slicer") || stage.includes
+              
