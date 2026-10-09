@@ -42,9 +42,9 @@ function initSponsorRotator() {
   const textEl = document.getElementById("sponsor-text");
   const linkEl = document.getElementById("sponsor-link");
 
-  const targetBadge = badgeEl || document.querySelector("a[href='#'] span, a span");
-  const targetText = textEl || document.querySelector("a[href='#'] p, a p");
-  const targetLink = linkEl || document.querySelector("a[href='#']") || document.querySelector("a");
+  const targetBadge = badgeEl || document.querySelector("a span");
+  const targetText = textEl || document.querySelector("a p");
+  const targetLink = linkEl || document.querySelector("a");
 
   if (!targetText) return;
 
@@ -76,10 +76,10 @@ async function loadDatabase() {
     databaseTrouble = await res.json();
     renderCards(databaseTrouble);
   } catch (error) {
-    console.error("Error al cargar la base de datos de diagnósticos:", error);
+    console.error("Error al cargar troubleshooting.json:", error);
     const container = document.getElementById("troubleshoot-cards");
     if (container) {
-      container.innerHTML = `<div class="p-8 text-center text-red-400 text-sm">Error al cargar troubleshooting.json.</div>`;
+      container.innerHTML = `<div class="p-8 text-center text-red-400 text-sm">Error al cargar la base de datos de diagnósticos.</div>`;
     }
   }
 }
