@@ -36,9 +36,9 @@
         </div>
       </div>
       
-      <!-- Registro Maker (Reemplaza a Google Login) -->
+      <!-- Registro Maker -->
       <div class="flex items-center space-x-4">
-        <button onclick="toggleModal(true)" type="button" class="bg-brand-500 hover:bg-brand-600 text-white text-xs px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 shadow-md cursor-pointer">
+        <button id="btn-abrir-registro" onclick="toggleModal(true)" type="button" class="bg-brand-500 hover:bg-brand-600 text-white text-xs px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 shadow-md cursor-pointer">
           <span>👤</span> Registrarme
         </button>
       </div>
@@ -145,7 +145,7 @@
     </a>
   </nav>
 
-  <!-- Modal de Registro Maker (Conectado a Google Sheets) -->
+  <!-- Modal de Registro Maker -->
   <div id="modal-registro" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
     <div class="bg-slate-900 border border-slate-700/80 rounded-2xl p-6 max-w-md w-full shadow-2xl relative">
       <button onclick="toggleModal(false)" type="button" class="absolute top-4 right-4 text-slate-400 hover:text-white text-sm cursor-pointer">✕</button>
