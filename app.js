@@ -169,13 +169,39 @@ function setupEventListeners() {
 
 function filterData() {
   const searchInput = document.getElementById("input-search");
-  const query = searchInput ? searchInput.value.toLowerCase() : "";
+  const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
   
   const filtered = databaseTrouble.filter((item) => {
-    const matchStage = currentStage === "ALL" || item.etapa === currentStage;
-    const matchText = (item.titulo || "").toLowerCase().includes(query) ||
+    // 1. Normalizar texto de etapa del JSON y del botón seleccionado
+    const itemEtapa = (item.etapa || "").toLowerCase();
+    const selectedStage = currentStage.toLowerCase().trim();
+
+    // 2. Comprobar si coincide la etapa
+    let matchStage = false;
+
+    if (selectedStage === "all" || selectedStage === "todas las etapas") {
+      matchStage = true;
+    } else if (selectedStage.includes("capa") || selectedStage.startsWith("1")) {
+      matchStage = itemEtapa.includes("capa") || itemEtapa.startsWith("1");
+    } else if (selectedStage.includes("extru") || selectedStage.startsWith("2")) {
+      matchStage = itemEtapa.includes("extru") || itemEtapa.startsWith("2");
+    } else if (selectedStage.includes("tér") || selectedStage.includes("humed") || selectedStage.startsWith("3")) {
+      matchStage = itemEtapa.includes("tér") || itemEtapa.includes("humed") || itemEtapa.startsWith("3");
+    } else if (selectedStage.includes("mecán") || selectedStage.startsWith("4")) {
+      matchStage = itemEtapa.includes("mecán") || itemEtapa.startsWith("4");
+    } else if (selectedStage.includes("slicer") || selectedStage.startsWith("5")) {
+      matchStage = itemEtapa.includes("slicer") || itemEtapa.startsWith("5");
+    } else {
+      // Comparación directa de respaldo
+      matchStage = itemEtapa.includes(selectedStage) || selectedStage.includes(itemEtapa);
+    }
+
+    // 3. Comprobar si coincide el texto buscado
+    const matchText = !query || 
+                      (item.titulo || "").toLowerCase().includes(query) ||
                       (item.sintomas || "").toLowerCase().includes(query) ||
                       (item.busquedas_coloquiales || []).some(b => b.toLowerCase().includes(query));
+
     return matchStage && matchText;
   });
 
