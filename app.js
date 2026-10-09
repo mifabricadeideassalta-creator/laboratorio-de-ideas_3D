@@ -164,7 +164,6 @@ function setupEventListeners() {
     });
   });
 }
-
 function filterData() {
   const searchInput = document.getElementById("input-search");
   const rawQuery = searchInput ? searchInput.value.toLowerCase().trim() : "";
@@ -190,8 +189,8 @@ function filterData() {
       matchStage = itemEtapa.includes("2") || itemEtapa.includes("extru") || itemEtapa.includes("flujo");
     } else if (stage.includes("3") || stage.includes("termica") || stage.includes("humedad")) {
       matchStage = itemEtapa.includes("3") || itemEtapa.includes("termica") || itemEtapa.includes("humedad");
-    } else if (stage.includes("4") || stage.includes("mecanica")) {
-      matchStage = itemEtapa.includes("4") || itemEtapa.includes("mecanica");
+    } else if (stage.includes("4") || stage.includes("mecanica") || stage.includes("mecanic")) {
+      matchStage = itemEtapa.includes("4") || itemEtapa.includes("mecanica") || itemEtapa.includes("mecanic");
     } else if (stage.includes("5") || stage.includes("slicer") || stage.includes("parametro")) {
       matchStage = itemEtapa.includes("5") || itemEtapa.includes("slicer") || itemEtapa.includes("parametro");
     } else {
@@ -208,3 +207,4 @@ function filterData() {
 
   renderCards(filtered);
 }
+
