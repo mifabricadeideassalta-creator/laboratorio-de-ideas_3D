@@ -169,46 +169,44 @@ function setupEventListeners() {
 
 function filterData() {
   const searchInput = document.getElementById("input-search");
-  const query = searchInput ? searchInput.value.toLowerCase().trim() : "";
+  const rawQuery = searchInput ? searchInput.value.toLowerCase().trim() : "";
   
-  // Función para remover acentos y caracteres especiales
-  const normalizeText = (str) => {
-    return (str || "")
-      .toLowerCase()
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "");
-  };
+  // Limpia tildes y acentos de cualquier texto
+  const clean = (text) => (text || "")
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
 
-  const selectedStage = normalizeText(currentStage);
+  const query = clean(rawQuery);
+  const stage = clean(currentStage);
 
   const filtered = databaseTrouble.filter((item) => {
-    const itemEtapa = normalizeText(item.etapa);
+    const itemEtapa = clean(item.etapa);
 
-    // Matching flexible por número o palabra clave
+    // Coincidencia flexible por número o palabra clave
     let matchStage = false;
 
-    if (selectedStage === "all" || selectedStage.includes("todas")) {
+    if (stage === "all" || stage.includes("todas")) {
       matchStage = true;
-    } else if (selectedStage.includes("1") || selectedStage.includes("capa") || selectedStage.includes("adherencia")) {
+    } else if (stage.includes("1") || stage.includes("capa") || stage.includes("adherencia")) {
       matchStage = itemEtapa.includes("1") || itemEtapa.includes("capa") || itemEtapa.includes("adherencia");
-    } else if (selectedStage.includes("2") || selectedStage.includes("extrusion") || selectedStage.includes("flujo")) {
-      matchStage = itemEtapa.includes("2") || itemEtapa.includes("extrusion") || itemEtapa.includes("flujo");
-    } else if (selectedStage.includes("3") || selectedStage.includes("termica") || selectedStage.includes("humedad")) {
+    } else if (stage.includes("2") || stage.includes("extru") || stage.includes("flujo")) {
+      matchStage = itemEtapa.includes("2") || itemEtapa.includes("extru") || itemEtapa.includes("flujo");
+    } else if (stage.includes("3") || stage.includes("termica") || stage.includes("humedad")) {
       matchStage = itemEtapa.includes("3") || itemEtapa.includes("termica") || itemEtapa.includes("humedad");
-    } else if (selectedStage.includes("4") || selectedStage.includes("mecanica")) {
+    } else if (stage.includes("4") || stage.includes("mecanica")) {
       matchStage = itemEtapa.includes("4") || itemEtapa.includes("mecanica");
-    } else if (selectedStage.includes("5") || selectedStage.includes("slicer") || selectedStage.includes("parametros")) {
-      matchStage = itemEtapa.includes("5") || itemEtapa.includes("slicer") || itemEtapa.includes("parametros");
+    } else if (stage.includes("5") || stage.includes("slicer") || stage.includes("parametro")) {
+      matchStage = itemEtapa.includes("5") || itemEtapa.includes("slicer") || itemEtapa.includes("parametro");
     } else {
-      matchStage = itemEtapa.includes(selectedStage) || selectedStage.includes(itemEtapa);
+      matchStage = itemEtapa.includes(stage) || stage.includes(itemEtapa);
     }
 
-    // Filtro de texto de búsqueda
-    const normQuery = normalizeText(query);
-    const matchText = !normQuery || 
-                      normalizeText(item.titulo).includes(normQuery) ||
-                      normalizeText(item.sintomas).includes(normQuery) ||
-                      (item.busquedas_coloquiales || []).some(b => normalizeText(b).includes(normQuery));
+    // Buscador
+    const matchText = !query || 
+      clean(item.titulo).includes(query) ||
+      clean(item.sintomas).includes(query) ||
+      (item.busquedas_coloquiales || []).some(b => clean(b).includes(query));
 
     return matchStage && matchText;
   });
