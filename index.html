@@ -7,7 +7,6 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#0f172a" />
   <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -37,14 +36,10 @@
         </div>
       </div>
       
-      <!-- Counter & Auth -->
+      <!-- Registro Maker (Reemplaza a Google Login) -->
       <div class="flex items-center space-x-4">
-        <div class="hidden sm:flex items-center space-x-2 bg-slate-900 px-3 py-1.5 rounded-full border border-slate-700">
-          <span class="w-2 h-2 rounded-full bg-lab-400 animate-pulse"></span>
-          <span id="user-count" class="text-xs font-mono text-slate-300">Cargando...</span>
-        </div>
-        <button id="btn-login" class="bg-brand-500 hover:bg-brand-600 text-white text-xs px-3 py-2 rounded-lg font-medium transition">
-          Ingresar con Google
+        <button onclick="toggleModal(true)" class="bg-brand-500 hover:bg-brand-600 text-white text-xs px-4 py-2 rounded-lg font-semibold transition flex items-center gap-2 shadow-md cursor-pointer">
+          <span>👤</span> Registrarme
         </button>
       </div>
     </div>
@@ -52,18 +47,18 @@
 
   <!-- Banner Publicitario Header -->
   <div class="max-w-6xl mx-auto w-full px-4 mt-4">
-  <div class="border border-brand-500/30 bg-slate-800/80 hover:bg-slate-800 transition rounded-xl p-3.5 text-center shadow-lg relative overflow-hidden group">
-    <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-brand-500/10 rounded-full blur-xl pointer-events-none"></div>
-    <a id="sponsor-link" href="#" target="_blank" rel="noopener noreferrer" class="block">
-      <span id="sponsor-badge" class="inline-block text-[10px] font-mono font-bold uppercase tracking-wider bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30 mb-1.5">
-        SPONSOR OFICIAL
-      </span>
-      <p id="sponsor-text" class="text-xs md:text-sm font-semibold text-slate-200 group-hover:text-brand-300 transition-colors">
-        Cargando promociones...
-      </p>
-    </a>
+    <div class="border border-brand-500/30 bg-slate-800/80 hover:bg-slate-800 transition rounded-xl p-3.5 text-center shadow-lg relative overflow-hidden group">
+      <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-brand-500/10 rounded-full blur-xl pointer-events-none"></div>
+      <a id="sponsor-link" href="#" target="_blank" rel="noopener noreferrer" class="block">
+        <span id="sponsor-badge" class="inline-block text-[10px] font-mono font-bold uppercase tracking-wider bg-brand-500/20 text-brand-400 px-2 py-0.5 rounded-full border border-brand-500/30 mb-1.5">
+          SPONSOR OFICIAL
+        </span>
+        <p id="sponsor-text" class="text-xs md:text-sm font-semibold text-slate-200 group-hover:text-brand-300 transition-colors">
+          Cargando promociones...
+        </p>
+      </a>
+    </div>
   </div>
-</div>
 
   <!-- Main Container -->
   <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -77,7 +72,7 @@
         <div class="space-y-3 text-xs">
           <div>
             <label class="block text-slate-400 mb-1">Arquitectura / Marca</label>
-            <select id="select-printer" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200">
+            <select id="select-printer" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-brand-500">
               <option value="all">Todas las impresoras</option>
               <option value="bambu">Bambu Lab (A1/P1S/AMS)</option>
               <option value="creality">Creality (Ender 3 / K1)</option>
@@ -86,7 +81,7 @@
           </div>
           <div>
             <label class="block text-slate-400 mb-1">Sistema Extrusión</label>
-            <select id="select-extruder" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200">
+            <select id="select-extruder" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-brand-500">
               <option value="all">Todos</option>
               <option value="direct">Directa (Direct Drive)</option>
               <option value="bowden">Bowden</option>
@@ -98,11 +93,22 @@
 
     <!-- Main Troubleshooting Area -->
     <section class="md:col-span-3 space-y-4">
-      <!-- Search Input -->
-      <div class="relative">
-        <input type="text" id="input-search" placeholder="Escribí tu problema (ej: 'ruido tac-tac', 'pelitos', 'no pega la 1ra capa')..." 
-               class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-500 transition" />
-        <span class="absolute right-3 top-3 text-slate-500">🔍</span>
+      <!-- Search Input con Lupa -->
+      <div class="relative flex items-center w-full">
+        <input 
+          type="text" 
+          id="input-search" 
+          placeholder="Escribí tu problema (ej: 'ruido tac-tac', 'pelitos', 'no pega la 1ra capa')..." 
+          class="w-full bg-slate-800 border border-slate-700 rounded-xl pl-4 pr-10 py-3 text-sm text-slate-100 placeholder-slate-400 focus:outline-none focus:border-brand-500 transition" 
+        />
+        <button 
+          id="btn-search" 
+          type="button" 
+          class="absolute right-3 text-slate-400 hover:text-white transition cursor-pointer flex items-center justify-center p-1"
+          title="Buscar"
+        >
+          🔍
+        </button>
       </div>
 
       <!-- Etapas de Diagnóstico -->
@@ -111,7 +117,7 @@
         <button class="stage-btn bg-slate-800 text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-slate-700" data-stage="PRIMERA_CAPA">1. Capa y Adherencia</button>
         <button class="stage-btn bg-slate-800 text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-slate-700" data-stage="EXTRUSION">2. Extrusión y Flujo</button>
         <button class="stage-btn bg-slate-800 text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-slate-700" data-stage="TERMICA">3. Térmica / Humedad</button>
-        <button class="stage-btn bg-slate-800 text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-slate-700" data-stage="CINEMATICA">4. Mecánica</button>
+        <button class="stage-btn bg-slate-800 text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-slate-700" data-stage="4. Mecánica">4. Mecánica</button>
         <button class="stage-btn bg-slate-800 text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-slate-700" data-stage="SLICER">5. Slicer / Parámetros</button>
       </div>
 
@@ -133,11 +139,42 @@
       <span>🎛️</span>
       <span>Slicers</span>
     </a>
-    <a href="#" class="flex flex-col items-center text-xs text-slate-400">
+    <a href="#" onclick="toggleModal(true); return false;" class="flex flex-col items-center text-xs text-slate-400">
       <span>👤</span>
       <span>Perfil</span>
     </a>
   </nav>
+
+  <!-- Modal de Registro Maker (Conectado a Google Sheets) -->
+  <div id="modal-registro" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center p-4 z-50">
+    <div class="bg-slate-900 border border-slate-700/80 rounded-2xl p-6 max-w-md w-full shadow-2xl relative">
+      <button onclick="toggleModal(false)" class="absolute top-4 right-4 text-slate-400 hover:text-white text-sm">✕</button>
+      
+      <h3 class="text-lg font-bold text-slate-100 mb-1 flex items-center gap-2">
+        <span>👤</span> Registro Maker
+      </h3>
+      <p class="text-xs text-slate-400 mb-4">Sumate a la base del laboratorio para recibir novedades, capacitaciones y red de soporte.</p>
+
+      <form id="form-registro" onsubmit="enviarAGoogleSheet(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Nombre y Apellido</label>
+          <input type="text" id="reg-nombre" required placeholder="Ej: Alberto Barrera" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Email / WhatsApp</label>
+          <input type="text" id="reg-contacto" required placeholder="Ej: 3871234567 / contacto@mail.com" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500">
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-300 mb-1">Tu Impresora / Rol</label>
+          <input type="text" id="reg-equipo" placeholder="Ej: Ender 3 / Servicio de impresión" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-brand-500">
+        </div>
+
+        <button id="btn-submit" type="submit" class="w-full bg-brand-500 hover:bg-brand-600 text-white font-semibold py-2.5 rounded-lg text-xs transition mt-2 flex items-center justify-center gap-2">
+          <span>Guardar Registro</span>
+        </button>
+      </form>
+    </div>
+  </div>
 
   <script src="app.js"></script>
 </body>
