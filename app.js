@@ -1,4 +1,4 @@
-// Pegá entre las comillas la URL que empieza con https://script.google.com/macros/s/.../exec
+
 const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwcV-90MJF41JDmIy7OKUyO8kQbwg8dk-5P7HhOuA1xUqkBrrgmNlqJOWVu4cesCzkKAw/exec";
 
 let databaseTrouble = [];
