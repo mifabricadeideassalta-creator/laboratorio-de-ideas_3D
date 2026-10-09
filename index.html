@@ -29,7 +29,7 @@
   <!-- Contenedor Principal en orden natural vertical -->
   <div class="relative z-10 flex flex-col min-h-screen w-full">
 
-    <!-- 1. Header (Arriba) -->
+    <!-- Header -->
     <header class="bg-zinc-950/85 backdrop-blur-md border-b border-purple-500/30 sticky top-0 z-50 shadow-[0_0_15px_rgba(168,85,247,0.15)]">
       <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
         <div class="flex items-center space-x-3">
@@ -51,7 +51,7 @@
       </div>
     </header>
 
-    <!-- 2. Banner Publicitario Header -->
+    <!-- Banner Publicitario Header -->
     <div class="max-w-6xl mx-auto w-full px-4 mt-4">
       <div class="border border-cyan-500/40 bg-zinc-900/85 backdrop-blur-sm hover:bg-zinc-900 transition rounded-xl p-3.5 text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] relative overflow-hidden group">
         <div class="absolute -right-6 -bottom-6 w-24 h-24 bg-cyan-500/10 rounded-full blur-xl pointer-events-none"></div>
@@ -66,125 +66,19 @@
       </div>
     </div>
 
-    <!-- 3. Contenido Principal (Sidebar + Seccion de Diagnostico) -->
+    <!-- Contenido Principal -->
     <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow grid grid-cols-1 md:grid-cols-4 gap-6">
       
-      <!-- Sidebar / Selector de Máquina -->
+      <!-- Sidebar / Calculadora de Costos 3D -->
       <aside class="md:col-span-1 space-y-4">
-        <div class="bg-zinc-900/85 backdrop-blur-sm border border-purple-500/20 rounded-xl p-4 shadow-[0_0_10px_rgba(168,85,247,0.05)]">
-          <h2 class="text-sm font-semibold text-lab-400 mb-3 flex items-center gap-2">
-            <span>⚙️</span> Mi Equipamiento
+        <div class="bg-zinc-900/85 backdrop-blur-sm border border-cyan-500/30 rounded-xl p-4 shadow-[0_0_15px_rgba(6,182,212,0.1)]">
+          <h2 class="text-sm font-bold text-lab-400 mb-3 flex items-center justify-between">
+            <span class="flex items-center gap-2">🧮 Costo de Impresión</span>
+            <span class="text-[10px] font-mono bg-cyan-500/20 text-cyan-300 px-1.5 py-0.5 rounded border border-cyan-500/30">EXPRESS</span>
           </h2>
-          <div class="space-y-3 text-xs">
+
+          <form id="form-calc-costos" oninput="calcularCostoImpresion()" class="space-y-3 text-xs">
+            <!-- Gramos de Filamento -->
             <div>
-              <label class="block text-slate-400 mb-1">Arquitectura / Marca</label>
-              <select id="select-printer" class="w-full bg-black/80 border border-zinc-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-lab-400">
-                <option value="all">Todas las impresoras</option>
-                <option value="bambu">Bambu Lab (A1/P1S/AMS)</option>
-                <option value="creality">Creality (Ender 3 / K1)</option>
-                <option value="elegoo">Elegoo Neptune</option>
-              </select>
-            </div>
-            <div>
-              <label class="block text-slate-400 mb-1">Sistema Extrusión</label>
-              <select id="select-extruder" class="w-full bg-black/80 border border-zinc-700 rounded-lg p-2 text-slate-200 focus:outline-none focus:border-lab-400">
-                <option value="all">Todos</option>
-                <option value="direct">Directa (Direct Drive)</option>
-                <option value="bowden">Bowden</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Seccion Principal de Diagnostico -->
-      <section class="md:col-span-3 space-y-4">
-        
-        <!-- Buscador con Lupa -->
-        <div class="relative flex items-center w-full">
-          <input 
-            type="text" 
-            id="input-search" 
-            placeholder="Escribí tu problema (ej: 'ruido tac-tac', 'pelitos', 'no pega la 1ra capa')..." 
-            class="w-full bg-zinc-900/85 backdrop-blur-sm border border-purple-500/30 rounded-xl pl-4 pr-10 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lab-400 focus:shadow-[0_0_10px_rgba(34,211,238,0.3)] transition" 
-          />
-          <button 
-            id="btn-search" 
-            type="button" 
-            class="absolute right-3 text-slate-400 hover:text-lab-400 transition cursor-pointer flex items-center justify-center p-1"
-            title="Buscar"
-          >
-            🔍
-          </button>
-        </div>
-
-        <!-- Etapas de Diagnóstico -->
-        <div class="flex gap-2 overflow-x-auto pb-2 text-xs scrollbar-none">
-          <button class="stage-btn active bg-brand-500 text-white px-3 py-1.5 rounded-lg whitespace-nowrap shadow-[0_0_10px_rgba(168,85,247,0.4)] border border-purple-400/30" data-stage="ALL">Todas las etapas</button>
-          <button class="stage-btn bg-zinc-900/85 backdrop-blur-sm text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-zinc-800 hover:border-purple-500/40" data-stage="PRIMERA_CAPA">1. Capa y Adherencia</button>
-          <button class="stage-btn bg-zinc-900/85 backdrop-blur-sm text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-zinc-800 hover:border-purple-500/40" data-stage="EXTRUSION">2. Extrusión y Flujo</button>
-          <button class="stage-btn bg-zinc-900/85 backdrop-blur-sm text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-zinc-800 hover:border-purple-500/40" data-stage="TERMICA">3. Térmica / Humedad</button>
-          <button class="stage-btn bg-zinc-900/85 backdrop-blur-sm text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-zinc-800 hover:border-purple-500/40" data-stage="4. Mecánica">4. Mecánica</button>
-          <button class="stage-btn bg-zinc-900/85 backdrop-blur-sm text-slate-400 px-3 py-1.5 rounded-lg whitespace-nowrap border border-zinc-800 hover:border-purple-500/40" data-stage="SLICER">5. Slicer / Parámetros</button>
-        </div>
-
-        <!-- Lista de Tarjetas (Abajo del buscador) -->
-        <div id="troubleshoot-cards" class="space-y-4">
-          <!-- Render dinámico desde troubleshooting.json -->
-        </div>
-      </section>
-
-    </main>
-
-    <!-- 4. Navegacion Mobile Footer -->
-    <nav class="md:hidden fixed bottom-0 left-0 right-0 bg-zinc-950/90 backdrop-blur-md border-t border-purple-500/30 flex justify-around py-2 z-50">
-      <a href="#" class="flex flex-col items-center text-xs text-brand-500">
-        <span>🔬</span>
-        <span>Diagnóstico</span>
-      </a>
-      <a href="#" class="flex flex-col items-center text-xs text-slate-400">
-        <span>🎛️</span>
-        <span>Slicers</span>
-      </a>
-      <a href="#" onclick="toggleModal(true); return false;" class="flex flex-col items-center text-xs text-slate-400">
-        <span>👤</span>
-        <span>Perfil</span>
-      </a>
-    </nav>
-
-    <!-- Modal de Registro Maker -->
-    <div id="modal-registro" class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center p-4 z-50">
-      <div class="bg-zinc-900/95 border border-lab-500/50 rounded-2xl p-6 max-w-md w-full shadow-[0_0_25px_rgba(6,182,212,0.25)] relative">
-        <button onclick="toggleModal(false)" type="button" class="absolute top-4 right-4 text-slate-400 hover:text-white text-sm cursor-pointer">✕</button>
-        
-        <h3 class="text-lg font-bold text-slate-100 mb-1 flex items-center gap-2">
-          <span>👤</span> Registro Maker
-        </h3>
-        <p class="text-xs text-slate-400 mb-4">Sumate a la base del laboratorio para recibir novedades, capacitaciones y red de soporte.</p>
-
-        <form id="form-registro" onsubmit="enviarAGoogleSheet(event)" class="space-y-3">
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Nombre y Apellido</label>
-            <input type="text" id="reg-nombre" required placeholder="Ej: Alberto Barrera" class="w-full bg-black/80 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-lab-400">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Email / WhatsApp</label>
-            <input type="text" id="reg-contacto" required placeholder="Ej: 3871234567 / contacto@mail.com" class="w-full bg-black/80 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-lab-400">
-          </div>
-          <div>
-            <label class="block text-xs font-semibold text-slate-300 mb-1">Tu Impresora / Rol</label>
-            <input type="text" id="reg-equipo" placeholder="Ej: Ender 3 / Servicio de impresión" class="w-full bg-black/80 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-lab-400">
-          </div>
-
-          <button id="btn-submit" type="submit" class="w-full bg-lab-500 hover:bg-lab-400 text-black font-bold py-2.5 rounded-lg text-xs transition mt-2 flex items-center justify-center gap-2 cursor-pointer shadow-[0_0_15px_rgba(34,211,238,0.5)]">
-            <span>Guardar Registro</span>
-          </button>
-        </form>
-      </div>
-    </div>
-
-  </div>
-
-  <script src="app.js"></script>
-</body>
-</html>
+              <label class="block text-slate-300 mb-1 font-medium">Peso del modelo (g)</label>
+              <input type="number" id="calc-gramos" placeholder="Ej: 85" min="0
