@@ -21,7 +21,61 @@
     }
   </script>
 </head>
-<body class="bg-black text-slate-100 flex flex-col min-h-screen font-sans pb-20 md:pb-0">
+<body class="bg-black text-slate-100 flex flex-col min-h-screen font-sans pb-20 md:pb-0 relative overflow-x-hidden bg-cover bg-center bg-fixed bg-no-repeat" style="background-image: linear-gradient(to bottom, rgba(0,0,0,0.8) 0%, rgba(15,15,15,0.9) 50%, rgba(20,20,20,0.9) 100%), url('https://images.unsplash.com/photo-1572019409893-eb471ed277f0?q=80&w=1920');">
+  
+  <!-- Overlay adicional de textura grid Cyberpunk opcional -->
+  <div class="fixed inset-0 pointer-events-none z-0" style="background-image: linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px); background-size: 40px 40px;"></div>
+
+  <!-- Contenedor Principal con z-10 para estar sobre el overlay -->
+  <div class="relative z-10 flex flex-col min-h-screen">
+    
+    <!-- Header -->
+    <header class="bg-zinc-950/85 backdrop-blur-md border-b border-purple-500/25 sticky top-0 z-50 shadow-[0_0_15px_rgba(168,85,247,0.15)]">
+      <!-- ... Resto del header sin cambios ... -->
+    </header>
+
+    <!-- Banner Publicitario Header -->
+    <div class="max-w-6xl mx-auto w-full px-4 mt-4">
+      <div class="border border-cyan-500/35 bg-zinc-900/80 hover:bg-zinc-900/90 transition rounded-xl p-3.5 text-center shadow-[0_0_15px_rgba(6,182,212,0.15)] relative overflow-hidden group">
+        <!-- ... Resto del banner sin cambios ... -->
+      </div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="max-w-6xl mx-auto w-full px-4 py-6 flex-grow grid grid-cols-1 md:grid-cols-4 gap-6">
+      
+      <!-- Sidebar / Selector de Máquina -->
+      <aside class="md:col-span-1 space-y-4">
+        <div class="bg-zinc-900/85 border border-purple-500/20 rounded-xl p-4 shadow-[0_0_10px_rgba(168,85,247,0.05)] backdrop-blur-sm">
+          <!-- ... Resto de la aside sin cambios ... -->
+        </div>
+      </aside>
+
+      <!-- Main Troubleshooting Area -->
+      <section class="md:col-span-3 space-y-4">
+        <!-- Search Input con Lupa -->
+        <div class="relative flex items-center w-full">
+          <input 
+            type="text" 
+            id="input-search" 
+            placeholder="Escribí tu problema..." 
+            class="w-full bg-zinc-900/80 border border-purple-500/25 rounded-xl pl-4 pr-10 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-lab-400 focus:shadow-[0_0_10px_rgba(34,211,238,0.25)] backdrop-blur-sm transition" 
+          />
+          <!-- ... Botón de búsqueda sin cambios ... -->
+        </div>
+        <!-- ... Etapas de diagnóstico ... -->
+        
+        <!-- Result List Container -->
+        <div id="troubleshoot-cards" class="space-y-4">
+          <!-- Render dinámico: Asegurate de usar bg-zinc-900/85 para las tarjetas dinámicas en app.js -->
+        </div>
+      </section>
+    </main>
+
+    <!-- ... Resto de tu HTML (Modal, Nav Mobile, Scripts) ... -->
+    
+  </div> <!-- Cierre del div z-10 relative principal -->
+</body>
 
   <!-- Header -->
   <header class="bg-zinc-950/90 backdrop-blur border-b border-purple-500/30 sticky top-0 z-50 shadow-[0_0_15px_rgba(168,85,247,0.15)]">
